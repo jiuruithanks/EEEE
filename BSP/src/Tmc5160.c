@@ -295,30 +295,30 @@ TMC_EN4_Pin,
 300000,		//Default value for the target speed	old 200000
 };
 
-SPI_CS_TypeDef SPICS5={
-SPI1_CSN5_GPIO_Port,
-SPI1_CSN5_Pin,
-TMC_EN5_GPIO_Port,
-TMC_EN5_Pin,
-0x000100C3,	//细分 mres  BIT27-BIT24  
-0x00000004,	//dir
-0x00020D03,	//current
-0x0000000A,	//current_delay
-0x00000001,	//mode
-0,			//xactual
-0,		   	//vactual
-100,		//vstart
-1000,		//加速度a1
-20000, 		//第一阶段速度阀值v1
-1000,		//V1与VMAX间加速度amax
-200000, 	//358400, 	  //目标速度vmax   200*256*5*1.4
-700,		//dmax
-1400,		//d1
-10,			//vstop
-&as5048b11,
-&STEP_MOTOR5_LIMIT,
-200000,		//Default value for the target speed  目标速度的默认值	old 200000
-};
+//SPI_CS_TypeDef SPICS5={
+//SPI1_CSN5_GPIO_Port,
+//SPI1_CSN5_Pin,
+//TMC_EN5_GPIO_Port,
+//TMC_EN5_Pin,
+//0x000100C3,	//细分 mres  BIT27-BIT24  
+//0x00000004,	//dir
+//0x00020D03,	//current
+//0x0000000A,	//current_delay
+//0x00000001,	//mode
+//0,			//xactual
+//0,		   	//vactual
+//100,		//vstart
+//1000,		//加速度a1
+//20000, 		//第一阶段速度阀值v1
+//1000,		//V1与VMAX间加速度amax
+//200000, 	//358400, 	  //目标速度vmax   200*256*5*1.4
+//700,		//dmax
+//1400,		//d1
+//10,			//vstop
+//&as5048b11,
+//&STEP_MOTOR5_LIMIT,
+//200000,		//Default value for the target speed  目标速度的默认值	old 200000
+//};
 #endif
 
 /* USER CODE BEGIN PV */
@@ -452,7 +452,7 @@ void Dis_All_Step_Driver(void)
   	HAL_GPIO_WritePin(TMC_EN2_GPIO_Port,TMC_EN2_Pin,GPIO_PIN_SET);
   	HAL_GPIO_WritePin(TMC_EN3_GPIO_Port,TMC_EN3_Pin,GPIO_PIN_SET);
  	HAL_GPIO_WritePin(TMC_EN4_GPIO_Port,TMC_EN4_Pin,GPIO_PIN_SET);
- 	HAL_GPIO_WritePin(TMC_EN5_GPIO_Port,TMC_EN5_Pin,GPIO_PIN_SET);
+// 	HAL_GPIO_WritePin(TMC_EN5_GPIO_Port,TMC_EN5_Pin,GPIO_PIN_SET);
 }
 
 /**
@@ -465,7 +465,7 @@ void EN_All_Step_Driver(void)
   	HAL_GPIO_WritePin(TMC_EN2_GPIO_Port,TMC_EN2_Pin,GPIO_PIN_RESET);
   	HAL_GPIO_WritePin(TMC_EN3_GPIO_Port,TMC_EN3_Pin,GPIO_PIN_RESET);
   	HAL_GPIO_WritePin(TMC_EN4_GPIO_Port,TMC_EN4_Pin,GPIO_PIN_RESET);
-  	HAL_GPIO_WritePin(TMC_EN5_GPIO_Port,TMC_EN5_Pin,GPIO_PIN_RESET);
+//  	HAL_GPIO_WritePin(TMC_EN5_GPIO_Port,TMC_EN5_Pin,GPIO_PIN_RESET);
 }
 
 /**

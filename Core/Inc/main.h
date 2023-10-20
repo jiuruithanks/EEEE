@@ -120,6 +120,7 @@ void Error_Handler(void);
 #define LIMIT0_GPIO_Port GPIOE
 #define LIMIT1_Pin GPIO_PIN_1
 #define LIMIT1_GPIO_Port GPIOE
+
 /* USER CODE BEGIN Private defines */
 
 

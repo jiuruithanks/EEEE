@@ -137,7 +137,7 @@ int main(void)
  
  ///get cpu mode///
 	mcu_mode = Get_Mode();
-	HAL_GPIO_WritePin(GPIOB, RESET9539_Pin,GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(GPIOB, RESET9539_Pin,GPIO_PIN_SET);
 //	HAL_GPIO_WritePin(GPIOB, RESET_NEW_Pin,GPIO_PIN_SET);
  
  //*STEP MOTOR */
@@ -147,7 +147,7 @@ int main(void)
 	Tmc5160Initial(&SPICS2);
 	Tmc5160Initial(&SPICS3);
 	Tmc5160Initial(&SPICS4);
-	Tmc5160Initial(&SPICS5);
+//	Tmc5160Initial(&SPICS5);
 
 	Dis_All_Step_Driver();
 
