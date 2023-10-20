@@ -175,33 +175,33 @@ void Updata_Current_device(PCA9555_HandleTypeDef *hdev_key, PCA9555_HandleTypeDe
 	 Run_DC_Motor(&DCmotor3, head, 12);
 	}	
 
-	if (current_device == 5)
-	{
-		AS5048B_Read(&as5048b11, 0xFE, &angle_as5048b_h);
+//	if (current_device == 5)
+//	{
+//		AS5048B_Read(&as5048b11, 0xFE, &angle_as5048b_h);
 
-		device5_dir = device_actionx->run_dir;
-		device5_rec_angle = device_actionx->rec_data;
+//		device5_dir = device_actionx->run_dir;
+//		device5_rec_angle = device_actionx->rec_data;
 
-		if((device5_dir == 0) && (device5_rec_angle < LIMIT_LEFT)) 
-		{
-			SPICS5.vmax = (SPICS5.vmax_default / 100) * device_actionx->run_speed; 
-			Run_STEP_Motor_SPEED(&SPICS5, back);
-		}
-		else if ((device5_dir == 1) && (device5_rec_angle > LIMIT_RIGHT))
-		{
-			SPICS5.vmax = (SPICS5.vmax_default / 100) * device_actionx->run_speed; 
-			Run_STEP_Motor_SPEED(&SPICS5, head);
-		}
-		else
-		{
-			Stop_STEP_Motor(&SPICS5);	
-		}
-	//	check_motor_status(&SPICS5);
-	}
-	else
-	{
-		Stop_STEP_Motor(&SPICS5);
-	}
+//		if((device5_dir == 0) && (device5_rec_angle < LIMIT_LEFT)) 
+//		{
+//			SPICS5.vmax = (SPICS5.vmax_default / 100) * device_actionx->run_speed; 
+//			Run_STEP_Motor_SPEED(&SPICS5, back);
+//		}
+//		else if ((device5_dir == 1) && (device5_rec_angle > LIMIT_RIGHT))
+//		{
+//			SPICS5.vmax = (SPICS5.vmax_default / 100) * device_actionx->run_speed; 
+//			Run_STEP_Motor_SPEED(&SPICS5, head);
+//		}
+//		else
+//		{
+//			Stop_STEP_Motor(&SPICS5);	
+//		}
+//	//	check_motor_status(&SPICS5);
+//	}
+//	else
+//	{
+//		Stop_STEP_Motor(&SPICS5);
+//	}
 	
 	
 }

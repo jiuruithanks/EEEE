@@ -49,22 +49,22 @@ void mode_select(uint8_t mode)
 {
     if (mode)
     {
-        UART1_Tx_Buf[5] = 1;
-        UART1_Tx_Buf[6] = 0;
-        UART1_Tx_Buf[7] = 0;
-        UART1_Tx_Buf[8] = 0;
-        UART1_Tx_Buf[9] = 0;
-        UART1_Tx_Buf[10] = 0;
-        UART1_Tx_Buf[11] = 0;
-        UART1_Tx_Buf[12] = 0;
-        UART1_Tx_Buf[13] = 0;
+        UART2_Tx_Buf[5] = 1;
+        UART2_Tx_Buf[6] = 0;
+        UART2_Tx_Buf[7] = 0;
+        UART2_Tx_Buf[8] = 0;
+        UART2_Tx_Buf[9] = 0;
+        UART2_Tx_Buf[10] = 0;
+        UART2_Tx_Buf[11] = 0;
+        UART2_Tx_Buf[12] = 0;
+        UART2_Tx_Buf[13] = 0;
     }
     else
     {
-        UART1_Tx_Buf[5] = 0;
-        UART1_Tx_Buf[14] = 0;
-        UART1_Tx_Buf[15] = 0;
-        UART1_Tx_Buf[16] = 0;
+        UART2_Tx_Buf[5] = 0;
+        UART2_Tx_Buf[14] = 0;
+        UART2_Tx_Buf[15] = 0;
+        UART2_Tx_Buf[16] = 0;
     }
 }
 
@@ -283,7 +283,7 @@ void ercp_inject_feedback(STATUS_MONITOR *status, uint8_t *data, SPI_CS_TypeDef 
 
 void Excute_Usart_TxData(void)
 {
-    check_TxData(UART1_Tx_Buf);
+    check_TxData(UART2_Tx_Buf);
 }
 
 

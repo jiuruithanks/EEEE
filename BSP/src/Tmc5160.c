@@ -169,30 +169,30 @@ TMC_EN4_Pin,
 200000,		//Default value for the target speed	old 200000
 };
 
-SPI_CS_TypeDef SPICS5={
-SPI1_CSN5_GPIO_Port,
-SPI1_CSN5_Pin,
-TMC_EN5_GPIO_Port,
-TMC_EN5_Pin,
-0x000100C3,	//细分 mres  BIT27-BIT24  
-0x00000004,	//dir
-0x00020A03,	//current
-0x0000000A,	//current_delay
-0x00000001,	//mode
-0,			//xactual
-0,		   	//vactual
-100,		//vstart
-100,		//加速度a1
-20000, 		//第一阶段速度阀值v1
-1000,		//V1与VMAX间加速度amax
-200000, 	//358400, 	  //目标速度vmax   200*256*5*1.4
-700,		//dmax
-1400,		//d1
-10,			//vstop
-0,
-&STEP_MOTOR5_LIMIT,
-200000,		//Default value for the target speed  目标速度的默认值	old 200000
-};
+//SPI_CS_TypeDef SPICS5={
+//SPI1_CSN5_GPIO_Port,
+//SPI1_CSN5_Pin,
+//TMC_EN5_GPIO_Port,
+//TMC_EN5_Pin,
+//0x000100C3,	//细分 mres  BIT27-BIT24  
+//0x00000004,	//dir
+//0x00020A03,	//current
+//0x0000000A,	//current_delay
+//0x00000001,	//mode
+//0,			//xactual
+//0,		   	//vactual
+//100,		//vstart
+//100,		//加速度a1
+//20000, 		//第一阶段速度阀值v1
+//1000,		//V1与VMAX间加速度amax
+//200000, 	//358400, 	  //目标速度vmax   200*256*5*1.4
+//700,		//dmax
+//1400,		//d1
+//10,			//vstop
+//0,
+//&STEP_MOTOR5_LIMIT,
+//200000,		//Default value for the target speed  目标速度的默认值	old 200000
+//};
 
 #else
 SPI_CS_TypeDef SPICS1={
@@ -439,7 +439,7 @@ void Run_All_Step_Motor(void)
 	Run_STEP_Motor_SPEED(&SPICS2, 1);
 	Run_STEP_Motor_SPEED(&SPICS3, 1);
 	Run_STEP_Motor_SPEED(&SPICS4, 1);
-	Run_STEP_Motor_SPEED(&SPICS5, 1);	
+//	Run_STEP_Motor_SPEED(&SPICS5, 1);	
 }
 
 /**
@@ -615,7 +615,7 @@ void Run_STEP_Motor_SPEED(SPI_CS_TypeDef *CS, int dir)
 	g_switch_back_status = HAL_GPIO_ReadPin(p->pos_limit->GPIOx_back, p->pos_limit->Pin_back);
 
 
-	if((p == &SPICS4) || (p == &SPICS5))
+	if((p == &SPICS4)) //|| (p == &SPICS5))
 	{
 		
 //	g_switch_head_status = HAL_GPIO_ReadPin(p->pos_limit->GPIOx_head, p->pos_limit->Pin_head);
