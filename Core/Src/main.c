@@ -42,6 +42,7 @@
 #include "24cxx.h"
 #include "XGZP6877D.h"
 #include "status_monitor_tasks.h"
+#include "communacation.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -128,9 +129,13 @@ int main(void)
 	PID_init();		
 //	xgzp6877d_init(&xgzp6877d_handle);
 	XGZP6877D_Init();
-	
-	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE); //使能IDLE中断	
-	HAL_UART_Receive_DMA(&huart1,UART1_Rx_Buf,MAX_REC_LENGTH);	
+    
+	  vStartReceive();
+//	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE); //使能IDLE中断	
+//	HAL_UART_Receive_DMA(&huart1,UART2_Rx_Buf,MAX_REC_LENGTH);	
+    
+	__HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE); //使能IDLE中断	
+	HAL_UART_Receive_DMA(&huart2,UART2_Rx_Buf,MAX_REC_LENGTH);	
 	
 	__HAL_UART_ENABLE_IT(&huart3, UART_IT_IDLE); //使能IDLE中断	
 	HAL_UART_Receive_DMA(&huart3,(uint8_t *)UART3_Rx_Buf,MAX_REC_LENGTH);

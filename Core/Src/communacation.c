@@ -4,34 +4,32 @@
 
 uint8_t ucSendDataBuff[10]={0};
 
-extern UART_HandleTypeDef huart2;
-extern DMA_HandleTypeDef hdma_usart2_rx;
-extern DMA_HandleTypeDef hdma_usart2_tx;
-
+extern UART_HandleTypeDef huart1;
+extern DMA_HandleTypeDef hdma_usart1_rx;
+extern DMA_HandleTypeDef hdma_usart1_tx;
+extern PCA9555_HandleTypeDef PCA9555_KEY;
 /*-------串口参数-----------------------------------------------*/
 
 #define BUFFER_SIZE     32                    //由协议求得
 uint8_t ucDMAReceiveBuff[BUFFER_SIZE] = {0};  //DMA缓冲区数组
 
-uint8_t ucFramBuff[BUFFER_SIZE];//抽出的数组
+uint8_t ucFramBuff[BUFFER_SIZE/2];//抽出的数组
 
+/*-------报文-------------------------------------------------*/
+xFramDecode_TypeDef FramDecode;
+xFramDecode_TypeDef LastFramDecode;
 
-/*---------报文参数----------------------------------------------*/
-uint8_t  ucFramHead;                //包头
-uint8_t  ucFramLength;              //包长度
-uint8_t  ucFramRecever;             //接收者
-uint8_t  ucFramType;                //包类型
-uint8_t  ucEscKey;                  //退出按键
-uint8_t  ucOptKey;                  //操作按键
-uint8_t  ucEnterKey;                //进入按键
-uint8_t  ucDsDcOpenOrClose;         //导丝DC开合
-uint8_t  ucDsBack;                  //导丝退
-uint8_t  ucDsFront;                 //导丝进
-uint8_t  usQxDcOpenOrClose;         //器械DC开合
-uint8_t  ucQxBack;                  //器械退
-uint8_t  ucQxFront;                 //器械进
-uint8_t  ucDangWei;                 //档位
-uint16_t usCRC;
+/*----------函数----------------------------------------------------------*/
+/**
+ * @brief  开启接收DMA
+ * @param  none
+ * @return none
+ * @note   none
+ */	
+void vStartReceive(void)
+{
+ UART_Start_Receive_DMA(&huart1, ucDMAReceiveBuff, BUFFER_SIZE);
+}
 
 
 /**
@@ -89,6 +87,45 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         
 }
 
+void vLightLED(xFramDecode_TypeDef xFramDecode)
+{
+    uint16_t usTemp = 0;
+    uint8_t ucFramToSend[10]={0xAA,0x08,0x02,0x01,  0,0,0,0,  0,0};
+    
+    /*1.组装*/
+    if((xFramDecode.ucOptKey == 1 ))//&&(LastFramDecode.ucOptKey == 0))
+    {
+     ucFramToSend[4] = 1;
+    }
+    else ucFramToSend[4] = 0; 
+    
+    if((xFramDecode.ucDsDcOpenOrClose == 1 ))//&&(LastFramDecode.ucDsDcOpenOrClose == 0))
+    {
+     ucFramToSend[5] = 1;
+    }
+    else ucFramToSend[5] = 0; 
+    
+    if((xFramDecode.usQxDcOpenOrClose == 1 ))//&&(LastFramDecode.usQxDcOpenOrClose == 0))
+    {
+     ucFramToSend[6] = 1;
+    }
+    else ucFramToSend[6] = 0; 
+     
+    if((xFramDecode.ucDangWei >= 1))//&&(LastFramDecode.ucDangWei <= 5))
+    {
+     ucFramToSend[7] = xFramDecode.ucDangWei;
+    }
+    else ucFramToSend[7] = 0; 
+    
+    /*2.计算CRC*/
+    usTemp = modbus_crc16(ucFramToSend, 8);
+    ucFramToSend[8] =  (uint8_t)(usTemp &0x00FF);
+    ucFramToSend[9] =  (uint8_t)((usTemp &0xFF00)>>8);
+    
+    /*3.发送回去*/
+    HAL_UART_Transmit(&huart1,ucFramToSend,10,100);
+}
+
 
 /**
  * @brief 拆分字符进行解码
@@ -97,36 +134,35 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
  * @return none
  * @note   
  */	
-void vByteSpot( uint8_t *ucBuff )
+void vByteSpot( uint8_t *ucFramBuff )
 {
-    uint8_t ucFramBuff[19];   //转义后的数组-长度由协议固定
 
     /*1.CRC校验*/
-    usCRC =  ((uint16_t)ucFramBuff[15] <<8) | ucFramBuff[14];        
+    FramDecode.usCRC =  ((uint16_t)ucFramBuff[15] <<8) | ucFramBuff[14];        
 
-    if(ucCheckCRC(ucFramBuff,usCRC)==0){return;}
+    if(ucCheckCRC(ucFramBuff,FramDecode.usCRC)==0){return;}
 
     /*2.逐字节解析*/
-    ucFramHead = ucFramBuff[0];    //包头
-    ucFramLength = ucFramBuff[1];  //包长度
-    ucFramRecever = ucFramBuff[2]; //接收者
-    ucFramType = ucFramBuff[3];    //包类型
+    FramDecode.ucFramHead = ucFramBuff[0];    //包头
+    FramDecode.ucFramLength = ucFramBuff[1];  //包长度
+    FramDecode.ucFramRecever = ucFramBuff[2]; //接收者
+    FramDecode.ucFramType = ucFramBuff[3];    //包类型
     
-    ucEscKey = ucFramBuff[4];                   //退出按键
-    ucOptKey = ucFramBuff[5];                   //操作按键
-    ucEnterKey = ucFramBuff[6];                 //进入按键
-    ucDsDcOpenOrClose = ucFramBuff[7];          //导丝DC开合
-    ucDsBack = ucFramBuff[8];                   //导丝退
-    ucDsFront = ucFramBuff[9];                  //导丝进
-    usQxDcOpenOrClose = ucFramBuff[10];         //器械DC开合
-    ucQxBack = ucFramBuff[11];                  //器械退
-    ucQxFront = ucFramBuff[12];                 //器械进
-    ucDangWei = ucFramBuff[13];                 //档位
+    FramDecode.ucEscKey = ucFramBuff[4];                   //退出按键
+    FramDecode.ucOptKey = ucFramBuff[5];                   //操作按键
+    FramDecode.ucEnterKey = ucFramBuff[6];                 //进入按键
+    FramDecode.ucDsDcOpenOrClose = ucFramBuff[7];          //导丝DC开合
+    FramDecode.ucDsBack = ucFramBuff[8];                   //导丝退
+    FramDecode.ucDsFront = ucFramBuff[9];                  //导丝进
+    FramDecode.usQxDcOpenOrClose = ucFramBuff[10];         //器械DC开合
+    FramDecode.ucQxBack = ucFramBuff[11];                  //器械退
+    FramDecode.ucQxFront = ucFramBuff[12];                 //器械进
+    FramDecode.ucDangWei = ucFramBuff[13];                 //档位
     
     
     
-
-
+    
+    vPca9555_Decode_Uart(&PCA9555_KEY,FramDecode); 
 }
 
 /**
@@ -135,10 +171,12 @@ void vByteSpot( uint8_t *ucBuff )
  * @param  *usCRC  			串口传递过来的CRC
  * @return 1-正确 0-有误
  * @note   
- */	
+ */	    uint16_t usTemp;
 uint8_t ucCheckCRC(uint8_t *ucFramBuff,uint16_t usCRC)
 {
-	 if(modbus_crc16(ucFramBuff, 17) == usCRC) //长度由协议制定
+   
+    usTemp = modbus_crc16(ucFramBuff, 16-2);
+	 if(usTemp == usCRC) //长度由协议制定
 	 {
 		 return 1;
 	 }

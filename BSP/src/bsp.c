@@ -390,18 +390,18 @@ void check_TxData(uint8_t *TxData)
 	*p++ = 0x10;
 	*p++ = 0x04;
 	*p++ = 0x01;
-	*p++ = UART1_Tx_Buf[5];
-	*p++ = UART1_Tx_Buf[6];
-	*p++ = UART1_Tx_Buf[7];
-	*p++ = UART1_Tx_Buf[8];
-	*p++ = UART1_Tx_Buf[9];
-	*p++ = UART1_Tx_Buf[10];
-	*p++ = UART1_Tx_Buf[11];
-	*p++ = UART1_Tx_Buf[12];
-	*p++ = UART1_Tx_Buf[13];
-	*p++ = UART1_Tx_Buf[14];
-	*p++ = UART1_Tx_Buf[15];
-	*p++ = UART1_Tx_Buf[16];
+	*p++ = UART2_Tx_Buf[5];
+	*p++ = UART2_Tx_Buf[6];
+	*p++ = UART2_Tx_Buf[7];
+	*p++ = UART2_Tx_Buf[8];
+	*p++ = UART2_Tx_Buf[9];
+	*p++ = UART2_Tx_Buf[10];
+	*p++ = UART2_Tx_Buf[11];
+	*p++ = UART2_Tx_Buf[12];
+	*p++ = UART2_Tx_Buf[13];
+	*p++ = UART2_Tx_Buf[14];
+	*p++ = UART2_Tx_Buf[15];
+	*p++ = UART2_Tx_Buf[16];
 
 	buf[1] = p - buf;
 	
@@ -410,8 +410,8 @@ void check_TxData(uint8_t *TxData)
 	*p++ = CRC16 >> 8;
 	length = p - buf;
 	inset_esc(buf, &length);
-	memcpy(UART1_Tx_Buf_reg, buf, length);
-	HAL_UART_Transmit(&huart1, buf, length, 0xFFFF);
+	memcpy(UART2_Tx_Buf_reg, buf, length);
+	HAL_UART_Transmit(&huart2, buf, length, 0xFFFF);
 }
 
 /**
@@ -423,7 +423,7 @@ void check_TxData(uint8_t *TxData)
 void Check_RecData(unsigned char *pData ,unsigned len)
 {
 	Uint16ToByte_Typedef Uint16ToByte_CRC16;
-	delete_esc(delete_esc_data, UART1_Rx_Buf_reg, &len );
+	delete_esc(delete_esc_data, UART2_Rx_Buf_reg, &len );
 	
 	if (len > 0x20)
 	{
@@ -463,10 +463,10 @@ void Check_RecData(unsigned char *pData ,unsigned len)
 */
 void clean_data(void)
 {
-	memset(UART1_Rx_Buf_reg, 0, sizeof(UART1_Rx_Buf_reg)); 
+	memset(UART2_Rx_Buf_reg, 0, sizeof(UART2_Rx_Buf_reg)); 
 //	memset(delete_esc_data, 0, sizeof(delete_esc_data));
-	UART1_Rx_cnt = 0;
-	UART1_Rx_flg = 0;		
+	UART2_Rx_cnt = 0;
+	UART2_Rx_flg = 0;		
 }
 
 
@@ -562,13 +562,13 @@ void bsp_RunPer100ms(void)
 //	pressure_measure_read(&xgzp6877d_handle);
 	Pressure_Temperature_Cal(&xgzp6877d_handle);
 
-	ercp_inject_feedback(&status_monitor, UART1_Tx_Buf, &SPICS1);
-	ercp_inject_feedback(&status_monitor, UART1_Tx_Buf, &SPICS2);
-	ercp_inject_feedback(&status_monitor, UART1_Tx_Buf, &SPICS3);
+	ercp_inject_feedback(&status_monitor, UART2_Tx_Buf, &SPICS1);
+	ercp_inject_feedback(&status_monitor, UART2_Tx_Buf, &SPICS2);
+	ercp_inject_feedback(&status_monitor, UART2_Tx_Buf, &SPICS3);
 #else
-	ercp_switch_feedback(&status_monitor, UART1_Tx_Buf);
-	ercp_device_feedback(&status_monitor, UART1_Tx_Buf);
-	ercp_gw_feedback(&status_monitor, UART1_Tx_Buf);
+	ercp_switch_feedback(&status_monitor, UART2_Tx_Buf);
+	ercp_device_feedback(&status_monitor, UART2_Tx_Buf);
+	ercp_gw_feedback(&status_monitor, UART2_Tx_Buf);
 #endif
     
 

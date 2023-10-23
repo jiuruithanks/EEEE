@@ -6,12 +6,12 @@
 
 /*********************************** AS5048B *******************************************************/
 /* 引脚 定义 */
-#define I2C_SCL_GPIO_PORT               GPIOB
-#define I2C_SCL_GPIO_PIN                GPIO_PIN_6
+#define I2C_SCL_GPIO_PORT               GPIOC
+#define I2C_SCL_GPIO_PIN                GPIO_PIN_11
 #define I2C_SCL_GPIO_CLK_ENABLE()       do{ __HAL_RCC_GPIOB_CLK_ENABLE(); }while(0)   /* PB口时钟使能 */
 
-#define I2C_SDA_GPIO_PORT               GPIOB
-#define I2C_SDA_GPIO_PIN                GPIO_PIN_7
+#define I2C_SDA_GPIO_PORT               GPIOC
+#define I2C_SDA_GPIO_PIN                GPIO_PIN_12
 #define I2C_SDA_GPIO_CLK_ENABLE()       do{ __HAL_RCC_GPIOB_CLK_ENABLE(); }while(0)   /* PB口时钟使能 */
 
 /* IO操作 */

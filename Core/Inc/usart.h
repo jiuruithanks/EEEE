@@ -43,13 +43,13 @@ extern UART_HandleTypeDef huart3;
 #define LENGTH  32 	
 	
   
-extern unsigned char UART1_Rx_Buf[MAX_REC_LENGTH];
-extern unsigned char UART1_Rx_flg;
-extern unsigned int  UART1_Rx_cnt;
-extern unsigned char UART1_Rx_Buf_reg[MAX_REC_LENGTH]; //USART1存储接收数据
+extern unsigned char UART2_Rx_Buf[MAX_REC_LENGTH];
+extern unsigned char UART2_Rx_flg;
+extern unsigned int  UART2_Rx_cnt;
+extern unsigned char UART2_Rx_Buf_reg[MAX_REC_LENGTH]; //USART1存储接收数据
 
-extern uint8_t  UART1_Tx_Buf[LENGTH];
-extern uint8_t	UART1_Tx_Buf_reg[LENGTH];
+extern uint8_t  UART2_Tx_Buf[LENGTH];
+extern uint8_t	UART2_Tx_Buf_reg[LENGTH];
 
 extern uint32_t UART3_Rx_Buf[MAX_REC_LENGTH];
 extern uint8_t  UART3_Rx_flg;

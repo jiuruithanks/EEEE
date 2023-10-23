@@ -23,12 +23,12 @@
 /* USER CODE BEGIN 0 */
 #include "string.h"
 #include "stdio.h"
-unsigned char 	UART1_Rx_Buf[MAX_REC_LENGTH];
-unsigned char 	UART1_Rx_flg;
-unsigned int  	UART1_Rx_cnt;
-unsigned char 	UART1_Rx_Buf_reg[MAX_REC_LENGTH]; //USART1存储接收数据
-uint8_t			    UART1_Tx_Buf[LENGTH];
-uint8_t			    UART1_Tx_Buf_reg[LENGTH];
+unsigned char 	UART2_Rx_Buf[MAX_REC_LENGTH];
+unsigned char 	UART2_Rx_flg;
+unsigned int  	UART2_Rx_cnt;
+unsigned char 	UART2_Rx_Buf_reg[MAX_REC_LENGTH]; //USART1存储接收数据
+uint8_t			    UART2_Tx_Buf[LENGTH];
+uint8_t			    UART2_Tx_Buf_reg[LENGTH];
 
 
 uint32_t UART3_Rx_Buf[MAX_REC_LENGTH];

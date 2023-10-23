@@ -390,27 +390,11 @@ void TIM1_UP_TIM10_IRQHandler(void)
 void USART1_IRQHandler(void)
 {
   /* USER CODE BEGIN USART1_IRQn 0 */
-	
-	uint32_t tmp_flag = 0;
-	uint32_t temp;
-	tmp_flag =__HAL_UART_GET_FLAG(&huart1,UART_FLAG_IDLE); //获取IDLE标志位
-	if((tmp_flag != RESET))//idle标志被置位
-	{ 
-		__HAL_UART_CLEAR_IDLEFLAG(&huart1);//清除标志位
-		HAL_UART_DMAStop(&huart1); //  停止DMA传输，防止
-		temp  =  __HAL_DMA_GET_COUNTER(&hdma_usart1_rx);// 获取DMA中未传输的数据个数   
-		UART1_Rx_cnt =  MAX_REC_LENGTH - temp; //总计数减去未传输的数据个数，得到已经接收的数据个数
-		UART1_Rx_flg = 1;	// 接受完成标志位置1	
-		memcpy(UART1_Rx_Buf_reg,UART1_Rx_Buf,UART1_Rx_cnt);
-	 
-		Check_RecData(UART1_Rx_Buf_reg,UART1_Rx_cnt);
-		
-	}
-	HAL_UART_Receive_DMA(&huart1,UART1_Rx_Buf,MAX_REC_LENGTH);
+
   /* USER CODE END USART1_IRQn 0 */
   HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
-  g_usart_flag = 1;
+
   /* USER CODE END USART1_IRQn 1 */
 }
 
@@ -420,11 +404,27 @@ void USART1_IRQHandler(void)
 void USART2_IRQHandler(void)
 {
   /* USER CODE BEGIN USART2_IRQn 0 */
-
+	
+	uint32_t tmp_flag = 0;
+	uint32_t temp;
+	tmp_flag =__HAL_UART_GET_FLAG(&huart2,UART_FLAG_IDLE); //获取IDLE标志位
+	if((tmp_flag != RESET))//idle标志被置位
+	{ 
+		__HAL_UART_CLEAR_IDLEFLAG(&huart2);//清除标志位
+		HAL_UART_DMAStop(&huart2); //  停止DMA传输，防止
+		temp  =  __HAL_DMA_GET_COUNTER(&hdma_usart2_rx);// 获取DMA中未传输的数据个数   
+		UART2_Rx_cnt =  MAX_REC_LENGTH - temp; //总计数减去未传输的数据个数，得到已经接收的数据个数
+		UART2_Rx_flg = 1;	// 接受完成标志位置1	
+		memcpy(UART2_Rx_Buf_reg,UART2_Rx_Buf,UART2_Rx_cnt);
+	 
+		Check_RecData(UART2_Rx_Buf_reg,UART2_Rx_cnt);
+		
+	}
+	HAL_UART_Receive_DMA(&huart2,UART2_Rx_Buf,MAX_REC_LENGTH);
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
-
+  g_usart_flag = 1;
   /* USER CODE END USART2_IRQn 1 */
 }
 
